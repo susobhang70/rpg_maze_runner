@@ -291,14 +291,26 @@ Scene_Title.prototype.createForeground = function() {
 
 Scene_Title.prototype.drawGameTitle = function() {
     var x = 20;
-    var y = Graphics.height / 4;
+    var y = Graphics.height / 8;
     var maxWidth = Graphics.width - x * 2;
     var text = $dataSystem.gameTitle;
     this._gameTitleSprite.bitmap.outlineColor = 'black';
     this._gameTitleSprite.bitmap.outlineWidth = 8;
-    this._gameTitleSprite.bitmap.fontSize = 72;
-    this._gameTitleSprite.bitmap.drawText(text, x, y, maxWidth, 48, 'center');
+    this._gameTitleSprite.bitmap.fontSize = 60; //Change this value to change font size
+    this._gameTitleSprite.bitmap.drawText(text, x, y, maxWidth, 48, 'center');     //  Adjust values for x and y to figure the pos of the title text
+
 };
+
+// Scene_Title.prototype.drawGameTitle = function() {
+//     var x = 20;
+//     var y = Graphics.height / 4;
+//     var maxWidth = Graphics.width - x * 2;
+//     var text = $dataSystem.gameTitle;
+//     this._gameTitleSprite.bitmap.outlineColor = 'black';
+//     this._gameTitleSprite.bitmap.outlineWidth = 8;
+//     this._gameTitleSprite.bitmap.fontSize = 72;
+//     this._gameTitleSprite.bitmap.drawText(text, x, y, maxWidth, 48, 'center');
+// };
 
 Scene_Title.prototype.centerSprite = function(sprite) {
     sprite.x = Graphics.width / 2;

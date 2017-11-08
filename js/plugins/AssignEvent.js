@@ -109,27 +109,28 @@ function CSVToArray( strData, strDelimiter ){
 	return( arrData );
 }
 
-var path = window.location.pathname.replace(/(\/www|)\/[^\/]*$/, '/data/');
-if (path.match(/^\/([A-Z]\:)/)) {
-	path = path.slice(1);
-}
-path = decodeURIComponent(path) + "save.txt";
-var fs = require('fs');
 //Read Text File
 var xhr = new XMLHttpRequest();
-xhr.open("GET","data/Questions.csv",false);
+xhr.open("GET", "data/Questions.csv", false);
 xhr.send(null);
 var fileContent = xhr.responseText;
 var questions = CSVToArray(fileContent);
-// console.log(questions[0]);
+
+xhr = new XMLHttpRequest();
+xhr.open("GET", "data/LevelUpQuestions.csv", false);
+xhr.send(null);
+fileContent = xhr.responseText;
+var finalQuestions = CSVToArray(fileContent);
 
 zoomVar = Number(PluginManager.parameters('AssignEvent')["Zoom Variable"]);
 responseVar = Number(PluginManager.parameters('AssignEvent')["Response Variable"]);
 respawnVar = Number(PluginManager.parameters('AssignEvent')["Player Respawn Variable"]);
 
 var questionPos = 0;
-var currentAnswerPos = 0;
+var currentLevel = 0;
 var zoomIncrement = 40;
+var start = [8,7];
+var mapId = [1,3];
 
 createEvent = function() {
 
@@ -151,10 +152,11 @@ createEvent = function() {
 	$gameMessage.setChoiceCallback(function(responseIndex) {
 		if(responseIndex === answerIndex)
 		{
+			questionPos++;
 			setTimeout(function() {
-				$gameMessage.add("Yes! Correct!");
-				$gameVariables.setValue(zoomVar, currentZoom + zoomIncrement);
 				$gameVariables.setValue(responseVar, 1);
+				$gameMessage.add("Yes! Correct! \\i[\.]");
+				$gameVariables.setValue(zoomVar, currentZoom + zoomIncrement);
 				$gamePlayer.setMoveSpeed($gamePlayer.moveSpeed() + 0.5);
 				$gamePlayer._animationId = 41;
 			}, 1000);
@@ -162,19 +164,62 @@ createEvent = function() {
 		else
 		{
 			setTimeout(function() {
+				$gameVariables.setValue(responseVar, 0);
 				$gameMessage.add("Oh NO!");
+				$gamePlayer.setMoveSpeed(4);
+				$gameVariables.setValue(zoomVar, 20);
+				var coords = Galv.SPAWN.randomRegion(respawnVar);
+				// $gamePlayer.reserveTransfer(1,coords[0],coords[1],0,1);
+			}, 1000);
+		}
+	});
+
+	if(questionPos === questions.length)
+		questionPos = 0;
+}
+
+createFinalLevelEvent = function() {
+
+	var currentQuestion = finalQuestions[currentLevel][0];
+	var options = finalQuestions[currentLevel].slice(1, finalQuestions[currentLevel].length);
+	var answer = options[0];
+	shuffle(options);
+	var answerIndex = options.indexOf(answer);
+
+	$gameMessage.setFaceImage('Actor1', 0);
+	$gameMessage.setBackground(1);
+	$gameMessage.setPositionType(2);
+
+	$gameMessage.add(currentQuestion);
+	
+	$gameMessage.setChoices(options, 1, -1);
+	$gameMessage.setChoiceCallback(function(responseIndex) {
+		if(responseIndex === answerIndex)
+		{
+			setTimeout(function() {
+				$gameMessage.add("Finally! This tunnel should lead me out!");
+				$gameVariables.setValue(zoomVar, 0);
+				// $gameVariables.setValue(responseVar, 1);
+				$gamePlayer.setMoveSpeed(4);
+				$gamePlayer._animationId = 41;
+
+				currentLevel++;
+				if(currentLevel === finalQuestions.length)
+					currentLevel = 0;
+
+				$gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
+			}, 1000);
+		}
+		else
+		{
+			setTimeout(function() {
+				$gameMessage.add("NOOOOOO");
 				$gamePlayer.setMoveSpeed(4);
 				$gameVariables.setValue(zoomVar, 20);
 				$gameVariables.setValue(responseVar, 0);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
 				// $gamePlayer.reserveTransfer(1,coords[0],coords[1],0,1);
-				questionPos--;
 			}, 1000);
 		}
 	});
-
-	questionPos++;
-
-	if(questionPos == questions.length)
-		questionPos = 0;
 }
