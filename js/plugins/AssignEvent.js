@@ -3,12 +3,16 @@
  *
  * @author Susobhan Ghosh
  *
- * @param Answer Variable
- * @desc In-Game variable ID used storing correct answer for the question
+ * @param Zoom Variable
+ * @desc In-Game variable ID used storing the zoom variable
+ * @default 1
+ *
+ * @param Response Variable
+ * @desc In-Game variable ID used storing the response variable, if it was true or false
  * @default 9
  *
- * @param Question Variable
- * @desc In-Game variable ID used storing the current question number
+ * @param Player Respawn Variable
+ * @desc In-Game Region ID denoting the player respawn points after getting a wrong answer
  * @default 10
 */
 
@@ -119,11 +123,13 @@ var fileContent = xhr.responseText;
 var questions = CSVToArray(fileContent);
 // console.log(questions[0]);
 
-answerVar = Number(PluginManager.parameters('AssignEvent')["Answer Variable"]);
-questionVar = Number(PluginManager.parameters('AssignEvent')["Question Variable"]);
+zoomVar = Number(PluginManager.parameters('AssignEvent')["Zoom Variable"]);
+responseVar = Number(PluginManager.parameters('AssignEvent')["Response Variable"]);
+respawnVar = Number(PluginManager.parameters('AssignEvent')["Player Respawn Variable"]);
 
 var questionPos = 0;
 var currentAnswerPos = 0;
+var zoomIncrement = 40;
 
 createEvent = function() {
 
@@ -132,6 +138,8 @@ createEvent = function() {
 	var answer = options[0];
 	shuffle(options);
 	var answerIndex = options.indexOf(answer);
+
+	var currentZoom = $gameVariables.value(zoomVar);
 
 	$gameMessage.setFaceImage('Actor1', 0);
 	$gameMessage.setBackground(1);
@@ -145,14 +153,22 @@ createEvent = function() {
 		{
 			setTimeout(function() {
 				$gameMessage.add("Yes! Correct!");
-				console.log("Yes");
+				$gameVariables.setValue(zoomVar, currentZoom + zoomIncrement);
+				$gameVariables.setValue(responseVar, 1);
+				$gamePlayer.setMoveSpeed($gamePlayer.moveSpeed() + 0.5);
+				$gamePlayer._animationId = 41;
 			}, 1000);
 		}
 		else
 		{
 			setTimeout(function() {
 				$gameMessage.add("Oh NO!");
-				console.log("No");
+				$gamePlayer.setMoveSpeed(4);
+				$gameVariables.setValue(zoomVar, 20);
+				$gameVariables.setValue(responseVar, 0);
+				var coords = Galv.SPAWN.randomRegion(respawnVar);
+				// $gamePlayer.reserveTransfer(1,coords[0],coords[1],0,1);
+				questionPos--;
 			}, 1000);
 		}
 	});
