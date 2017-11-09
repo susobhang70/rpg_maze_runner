@@ -14,6 +14,10 @@
  * @param Player Respawn Variable
  * @desc In-Game Region ID denoting the player respawn points after getting a wrong answer
  * @default 10
+ *
+ *@param Map Id Variable
+ *@desc In-Game mapId
+ *@default 5
 */
 
 function shuffle(a) {
@@ -122,9 +126,16 @@ xhr.send(null);
 fileContent = xhr.responseText;
 var finalQuestions = CSVToArray(fileContent);
 
+xhr = new XMLHttpRequest();
+xhr.open("GET", "data/TransitionText.csv", false);
+xhr.send(null);
+fileContent = xhr.responseText;
+var TransitionTexts = CSVToArray(fileContent);
+
 zoomVar = Number(PluginManager.parameters('AssignEvent')["Zoom Variable"]);
 responseVar = Number(PluginManager.parameters('AssignEvent')["Response Variable"]);
 respawnVar = Number(PluginManager.parameters('AssignEvent')["Player Respawn Variable"]);
+transmapid = Number(PluginManager.parameters('AssignEvent')["Map Id Variable"]);
 
 var questionPos = 0;
 var currentLevel = 0;
@@ -208,7 +219,7 @@ createFinalLevelEvent = function() {
 					currentLevel = 0;
 
 				// $gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
-				$gamePlayer.reserveTransfer(5, 16, 12, 0, 1);
+				$gamePlayer.reserveTransfer(transmapid, 16, 12, 0, 1);
 			}, 1000);
 		}
 		else
@@ -223,4 +234,14 @@ createFinalLevelEvent = function() {
 			}, 1000);
 		}
 	});
+}
+
+transitionLevel = function() {
+//	current_trans_text = TransitionTexts[currentLevel - 1][0];
+	$gameMessage.setScroll(2);
+	$gameMessage.add("HIT");
+	$gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
+	
+	
+
 }
