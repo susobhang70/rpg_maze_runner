@@ -16,8 +16,13 @@
  * @default 10
  *
  * @param Map Id Variable
- * @desc In-Game mapId
+ * @desc In-Game Map ID of the Transition Map
  * @default 5
+ *
+ * @param Timer Toggle Switch
+ * @desc In-Game Switch ID of the Timer Toggle
+ * @default 1
+ *
 */
 
 function shuffle(a) {
@@ -136,6 +141,8 @@ zoomVar = Number(PluginManager.parameters('AssignEvent')["Zoom Variable"]);
 responseVar = Number(PluginManager.parameters('AssignEvent')["Response Variable"]);
 respawnVar = Number(PluginManager.parameters('AssignEvent')["Player Respawn Variable"]);
 transmapid = Number(PluginManager.parameters('AssignEvent')["Map Id Variable"]);
+timerSwitchVar = Number(PluginManager.parameters('AssignEvent')["Timer Toggle Switch"]);
+clockSwitchVar = Number(PluginManager.parameters('AssignEvent')["Display Clock Switch"]);
 
 var questionPos = 0;
 var nCorrect = 0;
@@ -177,9 +184,10 @@ createEvent = function() {
 				$gamePlayer.setMoveSpeed($gamePlayer.moveSpeed() + 0.5);
 				$gamePlayer._animationId = 41;
 
-				// spawn end events after 4 correct answers only
-				// if((nCorrect) % 4 == 0)
-					// Galv.SPAWN.event(2, 200);
+				if((nCorrect) % 4 == 0)
+				{
+					$gameMessage.add("It says a tunnel has opened! I'll check");
+				}
 			}, 1000);
 		}
 		else
@@ -207,6 +215,13 @@ createFinalLevelEvent = function() {
 	$gameMessage.setFaceImage('Indrajit', 0);
 	$gameMessage.setBackground(1);
 	$gameMessage.setPositionType(2);
+
+	// spawn end events after 4 correct answers only
+	if((nCorrect) % 4 != 0)
+	{
+		$gameMessage.add("The tunnel somehow seems inaccessible");
+		return;
+	}
 
 	$gameMessage.add(currentQuestion);
 	
@@ -246,6 +261,8 @@ createFinalLevelEvent = function() {
 }
 
 transitionLevel = function() {
+	$gameSwitches.setValue(timerSwitchVar, false);
+
 //	current_trans_text = TransitionTexts[currentLevel - 1][0];
 	if(LastTrans == currentLevel)
 		return;	
@@ -253,7 +270,4 @@ transitionLevel = function() {
 	$gameMessage.add("HIT");
 	LastTrans = currentLevel;
 	$gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
-	
-	
-
 }
