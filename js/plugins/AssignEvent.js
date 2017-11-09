@@ -144,6 +144,7 @@ var currentFinalQuestion = 0;
 var zoomIncrement = 40;
 var start = [8,7];
 var mapId = [6,7,8,1,3];
+var LastTrans = 0;
 
 createEvent = function() {
 
@@ -226,6 +227,7 @@ createFinalLevelEvent = function() {
 					currentFinalQuestion = 0;
 
 				// $gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
+				$gameSwitches.setValue(3,true);
 				$gamePlayer.reserveTransfer(transmapid, 16, 12, 0, 1);
 			}, 1000);
 		}
@@ -245,8 +247,11 @@ createFinalLevelEvent = function() {
 
 transitionLevel = function() {
 //	current_trans_text = TransitionTexts[currentLevel - 1][0];
+	if(LastTrans == currentLevel)
+		return;	
 	$gameMessage.setScroll(2);
 	$gameMessage.add("HIT");
+	LastTrans = currentLevel;
 	$gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
 	
 	
