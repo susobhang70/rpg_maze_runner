@@ -142,7 +142,7 @@ createEvent = function() {
 
 	var currentZoom = $gameVariables.value(zoomVar);
 
-	$gameMessage.setFaceImage('Actor1', 0);
+	$gameMessage.setFaceImage('Indrajit', 0);
 	$gameMessage.setBackground(1);
 	$gameMessage.setPositionType(2);
 
@@ -186,7 +186,7 @@ createFinalLevelEvent = function() {
 	shuffle(options);
 	var answerIndex = options.indexOf(answer);
 
-	$gameMessage.setFaceImage('Actor1', 0);
+	$gameMessage.setFaceImage('Indrajit', 0);
 	$gameMessage.setBackground(1);
 	$gameMessage.setPositionType(2);
 
@@ -207,7 +207,8 @@ createFinalLevelEvent = function() {
 				if(currentLevel === finalQuestions.length)
 					currentLevel = 0;
 
-				$gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
+				// $gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
+				$gamePlayer.reserveTransfer(5, 16, 12, 0, 1);
 			}, 1000);
 		}
 		else
