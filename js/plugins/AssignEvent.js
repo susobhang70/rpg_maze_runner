@@ -155,7 +155,7 @@ createEvent = function() {
 			questionPos++;
 			setTimeout(function() {
 				$gameVariables.setValue(responseVar, 1);
-				$gameMessage.add("Yes! Correct! \\i[\.]");
+				$gameMessage.add("Yes! Seems I am correct, now I can see properly.");
 				$gameVariables.setValue(zoomVar, currentZoom + zoomIncrement);
 				$gamePlayer.setMoveSpeed($gamePlayer.moveSpeed() + 0.5);
 				$gamePlayer._animationId = 41;
@@ -165,7 +165,7 @@ createEvent = function() {
 		{
 			setTimeout(function() {
 				$gameVariables.setValue(responseVar, 0);
-				$gameMessage.add("Oh NO!");
+				$gameMessage.add("Oh NOOOOOO!");
 				$gamePlayer.setMoveSpeed(4);
 				$gameVariables.setValue(zoomVar, 20);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
@@ -197,7 +197,7 @@ createFinalLevelEvent = function() {
 		if(responseIndex === answerIndex)
 		{
 			setTimeout(function() {
-				$gameMessage.add("Finally! This tunnel should lead me out!");
+				$gameMessage.add("Finally! Let's see where this tunnel leads me");
 				$gameVariables.setValue(zoomVar, 0);
 				// $gameVariables.setValue(responseVar, 1);
 				$gamePlayer.setMoveSpeed(4);
