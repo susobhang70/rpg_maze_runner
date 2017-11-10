@@ -150,7 +150,7 @@ var currentLevel = 0;
 var currentFinalQuestion = 0;
 var zoomIncrement = 40;
 var start = [8,7];
-var mapId = [6,7,8,1,3];
+var mapId = [6,7,8,1,3,10];
 var LastTrans = 0;
 
 createEvent = function() {
