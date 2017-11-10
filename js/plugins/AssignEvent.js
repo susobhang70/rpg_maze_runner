@@ -188,7 +188,7 @@ createEvent = function() {
 				{
 					$gameMessage.add("It says a tunnel has opened! I'll check");
 				}
-			}, 1000);
+			}, 200);
 		}
 		else
 		{
@@ -199,7 +199,7 @@ createEvent = function() {
 				$gameVariables.setValue(zoomVar, 20);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
 				// $gamePlayer.reserveTransfer(1,coords[0],coords[1],0,1);
-			}, 1000);
+			}, 200);
 		}
 	});
 }
@@ -244,7 +244,7 @@ createFinalLevelEvent = function() {
 				// $gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
 				$gameSwitches.setValue(3,true);
 				$gamePlayer.reserveTransfer(transmapid, 16, 12, 0, 1);
-			}, 1000);
+			}, 200);
 		}
 		else
 		{
@@ -254,7 +254,7 @@ createFinalLevelEvent = function() {
 				$gameVariables.setValue(zoomVar, 20);
 				$gameVariables.setValue(responseVar, 0);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
-				// $gamePlayer.reserveTransfer(1,coords[0],coords[1],0,1);
+				//$gamePlayer.reserveTransfer(mapId[currentLevel],coords[0],coords[1],0,1);
 			}, 1000);
 		}
 	});
