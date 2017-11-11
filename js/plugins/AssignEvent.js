@@ -128,14 +128,14 @@ xhr.open("GET", "data/Questions.csv", false);
 xhr.send(null);
 var fileContent = xhr.responseText;
 var questions = CSVToArray(fileContent);
-shuffle(questions);
+//shuffle(questions);
 
 xhr = new XMLHttpRequest();
 xhr.open("GET", "data/LevelUpQuestions.csv", false);
 xhr.send(null);
 fileContent = xhr.responseText;
 var finalQuestions = CSVToArray(fileContent);
-shuffle(finalQuestions);
+//shuffle(finalQuestions);
 
 xhr = new XMLHttpRequest();
 xhr.open("GET", "data/TransitionText.csv", false);
@@ -270,12 +270,12 @@ createFinalLevelEvent = function() {
 transitionLevel = function() {
 	$gameSwitches.setValue(timerSwitchVar, false);
 
-//	current_trans_text = TransitionTexts[currentLevel - 1][0];
+	current_trans_text = TransitionTexts[currentLevel - 1][0];
 	if(LastTrans == currentLevel)
 		return;	
 	$gameVariables.setValue(opacityVar, 0);
 	$gameMessage.setScroll(2);
-	$gameMessage.add("HIT");
+	$gameMessage.add(current_trans_text);
 	LastTrans = currentLevel;
 	if(mapId[currentLevel] == 9)
 	{
