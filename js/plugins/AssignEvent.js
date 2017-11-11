@@ -11,9 +11,9 @@
  * @desc In-Game variable ID used storing the zoom variable
  * @default 2
  *
- * @param Response Variable
- * @desc In-Game variable ID used storing the response variable, if it was true or false
- * @default 9
+ * @param Current Event Variable
+ * @desc In-Game variable ID used storing the current event variable
+ * @default 5
  *
  * @param Player Respawn Variable
  * @desc In-Game Region ID denoting the player respawn points after getting a wrong answer
@@ -128,23 +128,26 @@ xhr.open("GET", "data/Questions.csv", false);
 xhr.send(null);
 var fileContent = xhr.responseText;
 var questions = CSVToArray(fileContent);
-//shuffle(questions);
+questions.splice(-1, 1);
+shuffle(questions);
 
 xhr = new XMLHttpRequest();
 xhr.open("GET", "data/LevelUpQuestions.csv", false);
 xhr.send(null);
 fileContent = xhr.responseText;
 var finalQuestions = CSVToArray(fileContent);
-//shuffle(finalQuestions);
+finalQuestions.splice(-1, 1);
+shuffle(finalQuestions);
 
 xhr = new XMLHttpRequest();
 xhr.open("GET", "data/TransitionText.csv", false);
 xhr.send(null);
 fileContent = xhr.responseText;
 var TransitionTexts = CSVToArray(fileContent);
+TransitionTexts.splice(-1, 1);
 
 zoomVar = Number(PluginManager.parameters('AssignEvent')["Zoom Variable"]);
-responseVar = Number(PluginManager.parameters('AssignEvent')["Response Variable"]);
+eventVar = Number(PluginManager.parameters('AssignEvent')["Current Event Variable"]);
 respawnVar = Number(PluginManager.parameters('AssignEvent')["Player Respawn Variable"]);
 transmapid = Number(PluginManager.parameters('AssignEvent')["Map Id Variable"]);
 timerSwitchVar = Number(PluginManager.parameters('AssignEvent')["Timer Toggle Switch"]);
@@ -169,13 +172,14 @@ createEvent = function() {
 	var answerIndex = options.indexOf(answer);
 
 	var currentZoom = $gameVariables.value(zoomVar);
+	var currentEvent = $gameVariables.value(eventVar);
 
 	$gameMessage.setFaceImage('Indrajit', 0);
 	$gameMessage.setBackground(1);
 	$gameMessage.setPositionType(2);
 
 	$gameMessage.add(currentQuestion);
-	
+
 	$gameMessage.setChoices(options, 1, -1);
 	$gameMessage.setChoiceCallback(function(responseIndex) {
 		if(responseIndex === answerIndex)
@@ -185,8 +189,8 @@ createEvent = function() {
 				nCorrect++;
 				if(questionPos == questions.length)
 					questionPos = 0;
-				$gameVariables.setValue(responseVar, 1);
-				$gameMessage.add("Yes! Seems I am correct, now I can see properly.");
+				$gameSelfSwitches.setValue([mapId[currentLevel], currentEvent, 'A'], true);
+				$gameMessage.add("Yes! Seems I am correct, now I can navigate better.");
 				$gameVariables.setValue(zoomVar, currentZoom + zoomIncrement);
 				$gamePlayer.setMoveSpeed($gamePlayer.moveSpeed() + 0.5);
 				$gamePlayer._animationId = 41;
@@ -200,8 +204,7 @@ createEvent = function() {
 		else
 		{
 			setTimeout(function() {
-				$gameVariables.setValue(responseVar, 0);
-				$gameMessage.add("Oh NOOOOOO!");
+				$gameMessage.add("Oh NOOOOOO! It's all fading away...");
 				$gamePlayer.setMoveSpeed(4);
 				$gameVariables.setValue(zoomVar, 20);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
@@ -239,7 +242,6 @@ createFinalLevelEvent = function() {
 			setTimeout(function() {
 				$gameMessage.add("Finally! Let's see where this tunnel leads me");
 				$gameVariables.setValue(zoomVar, 0);
-				// $gameVariables.setValue(responseVar, 1);
 				$gamePlayer.setMoveSpeed(4);
 				$gamePlayer._animationId = 41;
 
@@ -259,7 +261,6 @@ createFinalLevelEvent = function() {
 				$gameMessage.add("NOOOOOO");
 				$gamePlayer.setMoveSpeed(4);
 				$gameVariables.setValue(zoomVar, 20);
-				$gameVariables.setValue(responseVar, 0);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
 				$gamePlayer.reserveTransfer(mapId[currentLevel],coords[0],coords[1],0,1);
 			}, 1000);
