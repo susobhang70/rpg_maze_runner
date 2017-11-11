@@ -156,8 +156,8 @@ var currentLevel = 0;
 var currentFinalQuestion = 0;
 var zoomIncrement = 70;
 var start = [8,7];
-var mapId = [8,1,3,9];
-// var mapId = [6,7,8,9];
+//var mapId = [8,1,3,9];
+var mapId = [6,7,8,9];
 var LastTrans = 0;
 
 createEvent = function() {
