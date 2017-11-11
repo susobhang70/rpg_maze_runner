@@ -4,7 +4,7 @@ var $plugins =
 [
 {"name":"GALV_VisibilityRange","status":true,"description":"(v.1.2) Use an image to display a visibility range image around the player's position","parameters":{"Zoom Variable":"1","Opacity Variable":"2","Z Position":"10"}},
 {"name":"GALV_EventSpawner","status":true,"description":"(v.1.7) Spawn events from a specified spawn map to a desired location.","parameters":{"Spawn Map Id":"2"}},
-{"name":"AssignEvent","status":true,"description":"Uses two CSV files to load questions into the game message","parameters":{"Zoom Variable":"1","Response Variable":"9","Player Respawn Variable":"10","Map Id Variable":"5","Timer Toggle Switch":"1","Display Clock Switch":"2"}},
+{"name":"AssignEvent","status":true,"description":"Uses two CSV files to load questions into the game message","parameters":{"Zoom Variable":"1","Opacity Variable":"2","Response Variable":"9","Player Respawn Variable":"10","Map Id Variable":"5","Timer Toggle Switch":"1"}},
 {"name":"OrangeHud","status":true,"description":"<OrangeHud> 2.1 - Creates a custom HUD based on the params","parameters":{"DefaultFontFace":"Verdana","DefaultFontSize":"18","DefaultFontColor":"#FFFFFF","DefaultFontItalic":"false","HudWidth":"0","HudHeight":"0","HudX":"700","HudY":"0","HudOpacity":"0","SwitchId":"0","WindowMargin":"4","WindowPadding":"18","ShowOnMap":"true","ShowOnBattle":"false","ShowOnMenu":"false","ShowOnTitle":"false","ShowUnderTintLayer":"false","AutoRefresh":"true"}},
 {"name":"OrangeHudLine","status":true,"description":"OrangeHudLine 1.5 - Adds a new Variable to Orange Hud","parameters":{"GroupName":"main","Pattern":"%1","VariableId":"4","SwitchId":"2","X":"","Y":"","FontFace":"","FontSize":"","FontColor":"","FontItalic":"","ScriptPattern":"","VariableX":"0","VariableY":"0"}}
 ];

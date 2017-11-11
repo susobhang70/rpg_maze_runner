@@ -7,6 +7,10 @@
  * @desc In-Game variable ID used storing the zoom variable
  * @default 1
  *
+ * @param Opacity Variable
+ * @desc In-Game variable ID used storing the zoom variable
+ * @default 2
+ *
  * @param Response Variable
  * @desc In-Game variable ID used storing the response variable, if it was true or false
  * @default 9
@@ -124,12 +128,14 @@ xhr.open("GET", "data/Questions.csv", false);
 xhr.send(null);
 var fileContent = xhr.responseText;
 var questions = CSVToArray(fileContent);
+shuffle(questions);
 
 xhr = new XMLHttpRequest();
 xhr.open("GET", "data/LevelUpQuestions.csv", false);
 xhr.send(null);
 fileContent = xhr.responseText;
 var finalQuestions = CSVToArray(fileContent);
+shuffle(finalQuestions);
 
 xhr = new XMLHttpRequest();
 xhr.open("GET", "data/TransitionText.csv", false);
@@ -142,15 +148,16 @@ responseVar = Number(PluginManager.parameters('AssignEvent')["Response Variable"
 respawnVar = Number(PluginManager.parameters('AssignEvent')["Player Respawn Variable"]);
 transmapid = Number(PluginManager.parameters('AssignEvent')["Map Id Variable"]);
 timerSwitchVar = Number(PluginManager.parameters('AssignEvent')["Timer Toggle Switch"]);
-clockSwitchVar = Number(PluginManager.parameters('AssignEvent')["Display Clock Switch"]);
+opacityVar = Number(PluginManager.parameters('AssignEvent')["Opacity Variable"]);
 
 var questionPos = 0;
 var nCorrect = 0;
 var currentLevel = 0;
 var currentFinalQuestion = 0;
-var zoomIncrement = 40;
+var zoomIncrement = 70;
 var start = [8,7];
-var mapId = [6,7,8,1,3,10];
+var mapId = [8,1,3,9];
+// var mapId = [6,7,8,9];
 var LastTrans = 0;
 
 createEvent = function() {
@@ -198,7 +205,7 @@ createEvent = function() {
 				$gamePlayer.setMoveSpeed(4);
 				$gameVariables.setValue(zoomVar, 20);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
-				// $gamePlayer.reserveTransfer(1,coords[0],coords[1],0,1);
+				$gamePlayer.reserveTransfer(mapId[currentLevel],coords[0],coords[1],0,1);
 			}, 200);
 		}
 	});
@@ -254,7 +261,7 @@ createFinalLevelEvent = function() {
 				$gameVariables.setValue(zoomVar, 20);
 				$gameVariables.setValue(responseVar, 0);
 				var coords = Galv.SPAWN.randomRegion(respawnVar);
-				//$gamePlayer.reserveTransfer(mapId[currentLevel],coords[0],coords[1],0,1);
+				$gamePlayer.reserveTransfer(mapId[currentLevel],coords[0],coords[1],0,1);
 			}, 1000);
 		}
 	});
@@ -266,8 +273,14 @@ transitionLevel = function() {
 //	current_trans_text = TransitionTexts[currentLevel - 1][0];
 	if(LastTrans == currentLevel)
 		return;	
+	$gameVariables.setValue(opacityVar, 0);
 	$gameMessage.setScroll(2);
 	$gameMessage.add("HIT");
 	LastTrans = currentLevel;
-	$gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
+	if(mapId[currentLevel] == 9)
+	{
+		$gamePlayer.reserveTransfer(mapId[currentLevel], 2, 3, 0, 1);
+	}
+	else
+		$gamePlayer.reserveTransfer(mapId[currentLevel], start[0], start[1], 0, 1);
 }
